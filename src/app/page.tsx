@@ -16,7 +16,7 @@ export default function Home() {
   const [showApiKey, setShowApiKey] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadResult, setUploadResult] = useState<{
-    uuid: string;
+    sysFileUuid: string;
     url: string;
   } | null>(null);
 
@@ -67,7 +67,7 @@ export default function Home() {
       setStatus("Finalizing upload...");
       // Only send the partNumbers and ETags for the parts you uploaded
       const completeRes = await completeMultipartUpload({
-        uuid: initRes.uuid,
+        uuid: initRes.sysFileUuid,
         parts: initRes.parts
           .slice(0, parts.length)
           .map((part: { partNumber: number }, idx: number) => ({
@@ -80,7 +80,7 @@ export default function Home() {
       console.log("ETags:", eTags);
       console.log("Complete response:", completeRes);
       setUploadProgress(100);
-      setUploadResult({ uuid: completeRes.uuid, url: completeRes.url });
+      setUploadResult({ sysFileUuid: completeRes.sysFileUuid, url: completeRes.url });
     } catch (err: unknown) {
       if (typeof err === "object" && err && "message" in err) {
         setStatus("Error: " + (err as { message: string }).message);
@@ -248,7 +248,7 @@ export default function Home() {
               <div className="w-full text-sm text-gray-700">
                 <div className="mb-1 font-medium">SysFileUUID:</div>
                 <div className="break-all bg-white rounded px-2 py-1 border border-gray-200">
-                  {uploadResult.uuid}
+                  {uploadResult.sysFileUuid}
                 </div>
               </div>
               <div className="w-full text-sm text-gray-700">

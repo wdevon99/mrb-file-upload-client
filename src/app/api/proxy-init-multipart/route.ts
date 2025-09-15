@@ -16,8 +16,9 @@ export async function POST(req: NextRequest) {
   console.log("res:", res);
   console.log("apiKey:", apiKey);
 
-  const data = await res.text();
-  return new NextResponse(data, {
+  const data = await res.json();
+
+  return new NextResponse(JSON.stringify(data.data), {
     status: res.status,
     headers: { "Content-Type": "application/json" },
   });
